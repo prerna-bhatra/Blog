@@ -7,6 +7,15 @@ const CommentsSchema=new mongoose.Schema({
 		require:true
     }
     ,
+    BlogId:
+    {
+        type:Number
+    },
+    CommentPrivacy:
+    {
+        type:Number
+    }
+    ,
     UserName:
     {
       type:String

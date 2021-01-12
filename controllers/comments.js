@@ -23,27 +23,28 @@ exports.comment=(req,res)=>
 
 exports.ReadComment=(req,res)=>
 {  
-	const CommentsArray=[]
-Comment.find((err,data)=>
-	{
-		if(err)
+	const blogId=req.params;
+	console.log(blogId)
+	Comment.find({BlogId:req.params.blogId,CommentPrivacy:1},(err,data)=>
 		{
-			return res.status(400).json({
-				error:"no comments"
-			})
-		}
-		res.json(data)
-		
-	})
-
-    
+			if(err)
+			{
+				return res.status(400).json({
+					error:"no comments"
+				})
+			}
+			res.json(data)
+			
+		})
 };
 
 exports.MyComments=(req,res)=>
 {
 	const Userid=req.profile
+
+	console.log(req.params.blogId)
 	console.log(Userid)
-	Comment.find({UserId:req.profile._id},(err,data)=>
+	Comment.find({UserId:req.profile._id,BlogId:req.params.blogId},(err,data)=>
 	{
 		//console.log(res)
 		if(err)

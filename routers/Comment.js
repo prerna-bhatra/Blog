@@ -7,8 +7,8 @@ const {
 const {comment,ReadComment,MyComments}=require('../controllers/comments');
 
 router.post("/comment/:userId",comment)
-router.get("/MyComments/:userId",MyComments)
-router.get("/comments",ReadComment)
+router.get("/MyComments/:userId/:blogId",MyComments)
+router.get("/comments/:blogId",ReadComment)
 
 router.param('userId',userById)
 module.exports=router;
