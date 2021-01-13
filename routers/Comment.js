@@ -12,3 +12,4 @@ router.get("/comments/:blogId",ReadComment)
 
 router.param('userId',userById)
 module.exports=router;
+
