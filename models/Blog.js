@@ -3,8 +3,7 @@ const mongoose=require("mongoose");
 const BlogSchema=new mongoose.Schema({
 	UserId:
 	{
-		type:Object,
-		require:true
+		type:Object
     }
     ,
     SaveMode:
