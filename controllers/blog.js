@@ -88,6 +88,28 @@ exports.BlogById=(req,res,next,id)=>
 }
 
 
+exports.ReadBlogById=(req,res)=>
+{
+	var id=req.params.blogId;
+	console.log(id)
+Blog.findById(id).select("-BlogImg").exec((err,data)=>
+	{
+		if(err || !data)
+		{
+			return res.status(400).json({
+				error:"blog not found"	
+			})
+		}
+
+		res.json({
+                data
+           });
+		
+	})
+	
+}
+
+
 //fetch blog images seprately
 exports.photo=(req,res,next)=>{
 		//set the contet type

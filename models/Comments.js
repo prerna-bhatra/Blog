@@ -9,7 +9,7 @@ const CommentsSchema=new mongoose.Schema({
     ,
     BlogId:
     {
-        type:Number
+       type:Object
     },
     CommentPrivacy:
     {
