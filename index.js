@@ -7,6 +7,7 @@ const mongoURI=require('./config/dev.js')
 const userRoutes=require('./routers/User')
 const commentRoutes=require('./routers/Comment')
 const blogRoutes=require('./routers/Blog')
+const draftRoutes=require('./routers/EditDraft')
 const cookieParser = require('cookie-parser')
 const app =express()
 
@@ -24,6 +25,8 @@ app.use(cors())
 app.use('/api',userRoutes);
 app.use('/api',commentRoutes);
 app.use('/api',blogRoutes);
+app.use('/api',draftRoutes);
+
 
 app.listen(port, () => {
   console.log(`Server Running at ${port}`)

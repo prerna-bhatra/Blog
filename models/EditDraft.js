@@ -15,6 +15,16 @@ const EditDeaftSchema=new mongoose.Schema({
     UserName:
     {
       type:String
+    },
+    EditedHeading:
+    {
+        type:String
+    },
+    EditedImg:
+    {
+
+       data: Buffer,
+        contentType: String
     }
     ,
     EditedContent:
@@ -34,3 +44,6 @@ const EditDeaftSchema=new mongoose.Schema({
 );
 
 module.exports=mongoose.model("EditDraft",EditDeaftSchema);
+
+//updatedAt will be matched with today date then if dates are same then 1.0.11 ,1.0.12....
+//if dates are not same then add 1 for example 2.0.11,...and so on
