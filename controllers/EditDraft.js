@@ -199,19 +199,17 @@ exports.FetchEditedDraft=(req,res)=>
             });
 	}
 	)
-
-
 }
 
 
-exports.BlogById=(req,res,next,id)=>
+exports.EditDraftById=(req,res,next,id)=>
 {
-	Blog.findById(id).exec((err,data)=>
+	EditedDraftModel.findById(id).exec((err,data)=>
 	{
 		if(err || !data)
 		{
 			return res.status(400).json({
-				error:"blog not found"	
+				error:"Draft not found"	
 			})
 		}
 
@@ -246,9 +244,9 @@ Blog.findById(id).select("-BlogImg").exec((err,data)=>
 //fetch blog images seprately
 exports.photo=(req,res,next)=>{
 		//set the contet type
-		res.set('Contetnt-Type',req.data.BlogImg.contentType)
+		res.set('Contetnt-Type',req.data.EditedImg.contentType)
 		console.log(req.data)
-		return res.send(req.data.BlogImg.data)
+		return res.send(req.data.EditedImg.data)
 	
 	next()
 }
