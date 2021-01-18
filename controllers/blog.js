@@ -9,8 +9,8 @@ exports.createBlog=(req,res)=>
 {
 	console.log(req.body)
 	 let form=new formidable.IncomingForm()
-	 console.log(form)
-	 console.log(typeof(form))
+	 //console.log(form)
+	 //console.log(typeof(form))
 	 form.keepExtensions=true
 	form.parse(req,(err,fields,files)=>
 	{
@@ -21,7 +21,7 @@ exports.createBlog=(req,res)=>
 			})
 		}
 		let blog=new Blog(fields)
-		console.log(blog)
+		//console.log(blog)
 		console.log("files",files)
 		if(files.BlogImg)
 		{

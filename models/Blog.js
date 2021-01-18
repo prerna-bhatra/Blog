@@ -31,7 +31,13 @@ const BlogSchema=new mongoose.Schema({
     {
        data: Buffer,
         contentType: String
+    },
+    DraftId:
+    {
+        //this will be saved after we publish the draft
+          type:String
     }
+
 },
 {
 	timestamps:true

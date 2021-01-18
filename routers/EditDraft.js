@@ -4,11 +4,11 @@ const router=express.Router();
 const {
 	userById
 }=require('../controllers/User');
-const {EditDraft,FetchEditedDraft,EditDraftById,photo}=require('../controllers/EditDraft')
+const {EditDraft,FetchEditedDraft,EditDraftById,photo,PublishDraft}=require('../controllers/EditDraft')
 const {BlogById}=require('../controllers/blog')
 //
 router.post("/EditDraft/:userId/:blogId",EditDraft)
-//router.post("PublishEditedDraft/:userId/:blogId")
+router.post("/PublishEditedDraft/:userId/:blogId/:EditDraftId",PublishDraft)
 
 //router.get("/EditDraftimgjson/:EditDraftId",EditDraftimgjson)
 router.get("/EditDraftfetch/:userId/:blogId",FetchEditedDraft)

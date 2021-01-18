@@ -1,4 +1,5 @@
 const EditedDraftModel=require('../models/EditDraft.js')
+const Blog=require('../models/Blog.js')
 var formidable = require('formidable');
 const lodash= require('lodash');
 var fs = require('fs');
@@ -64,8 +65,27 @@ exports.EditDraft=(req,res)=>
 				//console.log("files",files)
 				if(files.EditedImg!==undefined)
 				{
+					console.log("user wants to chnage image")
 					editdraft.EditedImg.data=fs.readFileSync(files.EditedImg.path)
 					editdraft.EditedImg.contentType=files.EditedImg.type
+					editdraft.BlogId=blogid;
+					editdraft.UserId=user._id;
+					editdraft.UserName=user.name
+					editdraft.version=NewVersion
+					console.log("and here should be fiinal data ")	
+						
+						editdraft.save((err,data)=>
+					{
+						//console.log(err)
+						if(err)
+						{
+							return res.status(400).json({
+								error:"draft not created"
+							})
+						}
+						console.log("final data is saving or not ",data)
+						res.json(data)
+					})
 
 				}
 				else
@@ -141,10 +161,28 @@ exports.EditDraft=(req,res)=>
 				let editdraft=new EditedDraftModel(fields)
 				//console.log(editdraft)
 				//console.log("files",files)
-				if(files.EditedImg)
+				if(files.EditedImg!==undefined)
 				{
 					editdraft.EditedImg.data=fs.readFileSync(files.EditedImg.path)
 					editdraft.EditedImg.contentType=files.EditedImg.type
+					editdraft.BlogId=blogid;
+						editdraft.UserId=user._id;
+						editdraft.UserName=user.name
+						editdraft.version=NewVersion
+					console.log("and here should be fiinal data ")	
+				
+				editdraft.save((err,data)=>
+			{
+				//console.log(err)
+				if(err)
+				{
+					return res.status(400).json({
+						error:"draft not created"
+					})
+				}
+				console.log("final data is saving or not ",data)
+				res.json(data)
+			})
 
 				}
 				else
@@ -208,7 +246,7 @@ exports.EditDraft=(req,res)=>
 				let editdraft=new EditedDraftModel(fields)
 				//console.log(editdraft)
 				//console.log("files",files)
-				if(files.EditedImg)
+				if(files.EditedImg!==undefined)
 				{
 					editdraft.EditedImg.data=fs.readFileSync(files.EditedImg.path)
 					editdraft.EditedImg.contentType=files.EditedImg.type
@@ -237,6 +275,110 @@ exports.EditDraft=(req,res)=>
 
 }
 
+
+//publish draft 
+
+exports.PublishDraft=(req,res)=>
+{
+	const blogid=req.params.blogId
+	const user=req.profile
+	const drefatId=req.params.EditDraftId
+	let form=new formidable.IncomingForm()
+	console.log("formdata",form)
+	form.keepExtensions=true
+	form.parse(req,(err,fields,files)=>
+			{
+				if(err)
+				{
+					return res.status(400).json({
+						error:'Image could not be uploaded'
+					})
+				}
+				let publishDraft=new Blog(fields)
+				console.log("new fields",publishDraft)
+				console.log("DrfatId",req.params.EditDraftId)
+				if(files.BlogImg===undefined)
+				{
+					//it means user is not  changing none of the data then we will update only saveMode  and make it public 
+					//but here  may be two condition one is that user may update a draft or user may just publish the original blog
+					//publishDraft.EditedImg.data=fs.readFileSync(files.EditedImg.path)
+					//publishDraft.EditedImg.contentType=files.EditedImg.type
+					//for original blog we will just update the saveMode 
+					//but for publishing draft we will find the blog by draftit in editdraftmodel and for that we will send draftid 
+					//in params and if it will be 0 then original data is being pblished otherwise draftid will not be 0 and we will update it
+						console.log("Image is not getting changed")
+					if(req.params.EditDraftId==0)
+					{
+						//original blog publish
+						console.log("Blog Id ",blogid)
+						Blog.
+						update(
+					  {_id: blogid}, 
+					  {$set: {'BlogHeading': publishDraft.BlogHeading,'BlogContent':publishDraft.BlogContent,'SaveMode':1}}, 
+					  (req,res)=>
+					  {
+					  		if(err)
+					  		{
+					  			console.log(err)
+					  		}
+					  		console.log("after update",res)
+					  })
+					}
+					else
+					{
+
+					EditedDraftModel.findById(req.params.EditDraftId).exec((err,data)=>
+					{
+						if(err || !data)
+						{
+							return res.status(400).json({
+								error:"Draft not found"	
+							})
+						}
+					console.log("Data from version",data)
+					Blog.
+						update(
+					  {_id: blogid}, 
+					  {$set: {'BlogHeading': publishDraft.BlogHeading,'BlogImg.data':data.EditedImg.data,'BlogImg.contentType':data.EditedImg.contentType,'BlogContent':publishDraft.BlogContent,'SaveMode':1}}, 
+					  (req,res)=>
+					  {
+					  		if(err)
+					  		{
+					  			console.log(err)
+					  		}
+					  		console.log("after update",res)
+					  })
+					})
+					}
+					
+				}
+				else
+				{	
+					
+					//it means user  wants to chnage image also
+					console.log("user wants to chnage image along with other data other data may be may not be changed")
+					Blog.
+						update(
+					  {_id: blogid}, 
+					  {$set: {'BlogHeading': publishDraft.BlogHeading,'BlogImg.data':fs.readFileSync(files.BlogImg.path),'BlogImg.contentType':files.BlogImg.type,'BlogContent':publishDraft.BlogContent,'SaveMode':1}}, 
+					  (req,res)=>
+					  {
+					  		if(err)
+					  		{
+					  			console.log(err)
+					  		}
+					  		console.log("after update",res)
+					  })
+					
+
+				}
+						
+					})	
+			
+}
+
+
+
 exports.FetchEditedDraft=(req,res)=>
 {
 
@@ -261,8 +403,19 @@ exports.FetchEditedDraft=(req,res)=>
 }
 
 
+
 exports.EditDraftById=(req,res,next,id)=>
 {
+	console.log("if id is 0 it means original data is being published",id)
+	if(id==0)
+	{
+		console.log("if condition")
+		next()
+	}
+	else
+	{
+		console.log("else condition")
+
 	EditedDraftModel.findById(id).exec((err,data)=>
 	{
 		if(err || !data)
@@ -275,6 +428,7 @@ exports.EditDraftById=(req,res,next,id)=>
 		req.data=data
 		next()
 	})
+	}
 }
 
 
