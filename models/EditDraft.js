@@ -24,7 +24,7 @@ const EditDeaftSchema=new mongoose.Schema({
     {
 
        data: Buffer,
-        contentType: String
+       contentType: String,
     }
     ,
     EditedContent:
@@ -35,6 +35,10 @@ const EditDeaftSchema=new mongoose.Schema({
     version:
     {
         type:Number
+    },
+    DummyId:
+    {
+        type:String
     }
 
 },
@@ -42,6 +46,7 @@ const EditDeaftSchema=new mongoose.Schema({
 	timestamps:true
 }
 );
+
 
 module.exports=mongoose.model("EditDraft",EditDeaftSchema);
 

@@ -5,30 +5,31 @@ var fs = require('fs');
 var path = require('path');
 var multer = require('multer');
 var moment=require('moment')
+const {ObjectID} = require('mongodb');
 exports.EditDraft=(req,res)=>
 {
 	//console.log(req.body)
 		const blogid=req.params.blogId
 		const user=req.profile
-		console.log(user)
-		console.log(blogid)
+		//console.log(user)
+		//console.log(blogid)
 		EditedDraftModel.find({BlogId:blogid},(err,data)=>
 		{
 			if(err)
 			{
-				console.log(err)
+				//console.log(err)
 				return res.status(400).json({
 				error:'Blog not in draft'
 			   })
 						
 			
 			}
-			console.log(data.length)
+			//console.log(data.length)
 
 			if(data.length>0)
 			{
-				console.log(data)
-				console.log(Array.isArray(data))
+				//console.log(data)
+				//console.log(Array.isArray(data))
 				const datesArray=[]
 				const VersionArray=[]
 				data.forEach(copydata)
@@ -37,17 +38,17 @@ exports.EditDraft=(req,res)=>
 					datesArray[index]=data[index].createdAt
 					VersionArray[index]=data[index].version
 				}
-				console.log(VersionArray)
+				//console.log(VersionArray)
 				var maxDate=new Date(Math.max.apply(null,datesArray)).toDateString();
 				var TodayDate = new Date().toDateString();
 
-				console.log(maxDate,TodayDate)
+				//console.log(maxDate,TodayDate)
 				if(maxDate===TodayDate)
 				{
 					//console.log("yes")
 					const LastVersion=Math.max(...VersionArray)
 					const NewVersion=LastVersion;
-					console.log(NewVersion)
+					//console.log(NewVersion)
 					let form=new formidable.IncomingForm()
 			 form.keepExtensions=true
 			form.parse(req,(err,fields,files)=>
@@ -61,17 +62,45 @@ exports.EditDraft=(req,res)=>
 				let editdraft=new EditedDraftModel(fields)
 				//console.log(editdraft)
 				//console.log("files",files)
-				if(files.EditedImg)
+				if(files.EditedImg!==undefined)
 				{
 					editdraft.EditedImg.data=fs.readFileSync(files.EditedImg.path)
 					editdraft.EditedImg.contentType=files.EditedImg.type
 
 				}
-					//console.log(EditedDraftModel)
+				else
+				{
+					console.log("User Not selected input image")
+					const id = new ObjectID(editdraft.DummyId);
+					console.log(id)
+					EditedDraftModel.findById(id).exec((err,data)=>
+					{
+						if(err || !data)
+						{
+							return res.status(400).json({
+								error:"Draft not found"	
+							})
+						}
+						console.log("DummyIddata",data)
+						editdraft.EditedImg.contentType = 'image/png';
+						console.log('BUFF OR BLUFF', data.EditedImg.data)
+						console.log(Buffer.isBuffer(data.EditedImg.data))
+				
+						editdraft.EditedImg.data = data.EditedImg.data; // Object.assign(editdraft.EditedImg,data.EditedImg)
+						console.log("LETS CHECK IF EditDraft IMAGE IS CHANGING")
+						console.log(editdraft.EditedImg);
+						console.log('LETS BE HONEST2');
+						console.log(editdraft);
+						//editdraft.EditedImg={...data.EditedImg}
+						//req.data=data
+						//next()
+						console.log("here we are seting key of editdraft model field")
 						editdraft.BlogId=blogid;
 						editdraft.UserId=user._id;
 						editdraft.UserName=user.name
 						editdraft.version=NewVersion
+					console.log("and here should be fiinal data ")	
+				
 				editdraft.save((err,data)=>
 			{
 				//console.log(err)
@@ -81,8 +110,14 @@ exports.EditDraft=(req,res)=>
 						error:"draft not created"
 					})
 				}
+				console.log("final data is saving or not ",data)
 				res.json(data)
 			})
+					})
+
+				}
+					//console.log(EditedDraftModel)
+
 			})	
 
 
@@ -92,7 +127,7 @@ exports.EditDraft=(req,res)=>
 				{
 						const LastVersion=Math.max(...VersionArray)
 						const NewVersion=LastVersion+1;
-						console.log(NewVersion)
+						//console.log(NewVersion)
 						let form=new formidable.IncomingForm()
 			 form.keepExtensions=true
 			form.parse(req,(err,fields,files)=>
@@ -112,12 +147,31 @@ exports.EditDraft=(req,res)=>
 					editdraft.EditedImg.contentType=files.EditedImg.type
 
 				}
-					//console.log(EditedDraftModel)
+				else
+					{
+							console.log("User Not selected input image")
+					const id = new ObjectID(editdraft.DummyId);
+					console.log(id)
+					EditedDraftModel.findById(id).exec((err,data)=>
+					{
+						if(err || !data)
+						{
+							return res.status(400).json({
+								error:"Draft not found"	
+							})
+						}
+						console.log("DummyIddata",data)
+						editdraft.EditedImg = Object.assign(editdraft.EditedImg,data.EditedImg)
+						//editdraft.EditedImg={...data.EditedImg}
+						//req.data=data
+						//next()
 						editdraft.BlogId=blogid;
 						editdraft.UserId=user._id;
 						editdraft.UserName=user.name
 						editdraft.version=NewVersion
-				editdraft.save((err,data)=>
+						console.log('LETS BE HONEST');
+						console.log(editdraft);
+							editdraft.save((err,data)=>
 			{
 				//console.log(err)
 				if(err)
@@ -128,6 +182,11 @@ exports.EditDraft=(req,res)=>
 				}
 				res.json(data)
 			})
+					})
+					}
+							//console.log(EditedDraftModel)
+						
+			
 			})	
 
 
@@ -183,7 +242,7 @@ exports.FetchEditedDraft=(req,res)=>
 
 	const blogId=req.params.blogId;
 	const user=req.profile
-	console.log(req.profile)
+	//console.log(req.profile)
 	EditedDraftModel.find({BlogId:blogId,UserId:user._id})
 	.select("-EditedImg")
 	.exec((err,data)=>
@@ -222,7 +281,7 @@ exports.EditDraftById=(req,res,next,id)=>
 exports.ReadBlogById=(req,res)=>
 {
 	var id=req.params.blogId;
-	console.log(id)
+	//console.log(id)
 Blog.findById(id).select("-BlogImg").exec((err,data)=>
 	{
 		if(err || !data)
@@ -245,7 +304,7 @@ Blog.findById(id).select("-BlogImg").exec((err,data)=>
 exports.photo=(req,res,next)=>{
 		//set the contet type
 		res.set('Contetnt-Type',req.data.EditedImg.contentType)
-		console.log(req.data)
+		//console.log(req.data)
 		return res.send(req.data.EditedImg.data)
 	
 	next()
@@ -255,8 +314,8 @@ exports.photo=(req,res,next)=>{
 exports.showdrafts=(req,res)=>
 {
 	const Userid=(req.profile._id).toString()
-	console.log(typeof(Userid))
-	console.log(req.profile)
+	//console.log(typeof(Userid))
+	//console.log(req.profile)
 
 	Blog.find({SaveMode:0,UserId:Userid})
 	.select("-BlogImg")

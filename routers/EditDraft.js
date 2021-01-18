@@ -8,6 +8,9 @@ const {EditDraft,FetchEditedDraft,EditDraftById,photo}=require('../controllers/E
 const {BlogById}=require('../controllers/blog')
 //
 router.post("/EditDraft/:userId/:blogId",EditDraft)
+//router.post("PublishEditedDraft/:userId/:blogId")
+
+//router.get("/EditDraftimgjson/:EditDraftId",EditDraftimgjson)
 router.get("/EditDraftfetch/:userId/:blogId",FetchEditedDraft)
 router.get("/EditDraftimg/:EditDraftId",photo)
 router.param('EditDraftId',EditDraftById)
