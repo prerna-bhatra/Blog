@@ -354,6 +354,7 @@ exports.PublishDraft=(req,res)=>
 				}
 				else
 				{	
+
 					
 					//it means user  wants to chnage image also
 					console.log("user wants to chnage image along with other data other data may be may not be changed")
@@ -374,6 +375,7 @@ exports.PublishDraft=(req,res)=>
 				}
 						
 					})	
+
 			
 }
 

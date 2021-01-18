@@ -1,1 +1,1 @@
-module.exports =  "mongodb+srv://prerna:Prerna123@cluster0.jokxx.mongodb.net/VcomplyBlog?retryWrites=true&w=majority"
+module.exports =  "mongodb+srv://bhatraprerna:Bhavesh@1998@cluster0.jokxx.mongodb.net/VcomplyBlog?retryWrites=true&w=majority"
