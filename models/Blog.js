@@ -14,6 +14,10 @@ const BlogSchema=new mongoose.Schema({
     UserName:
     {
       type:String
+    },
+    viewedBy:
+    {
+        type : Array 
     }
     ,
     BlogHeading:
@@ -36,6 +40,10 @@ const BlogSchema=new mongoose.Schema({
     {
         //this will be saved after we publish the draft
           type:String
+    },
+    hashTags:
+    {
+        type:[String]
     }
 
 },

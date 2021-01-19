@@ -90,9 +90,13 @@ exports.BlogById=(req,res,next,id)=>
 
 exports.ReadBlogById=(req,res)=>
 {
-	var id=req.params.blogId;
+
+	const id=req.params.blogId;
+	const userId=req.params.userId;
+	console.log("userid",userId)
 	console.log(id)
-Blog.findById(id).select("-BlogImg").exec((err,data)=>
+
+	Blog.findById(id).select("-BlogImg").exec((err,data)=>
 	{
 		if(err || !data)
 		{
@@ -101,9 +105,25 @@ Blog.findById(id).select("-BlogImg").exec((err,data)=>
 			})
 		}
 
-		res.json({
-                data
-           });
+					//console.log(data)
+					//console.log("user visiting first time so add a view on thee blog post")
+					//console.log(id,typeof(userId))
+					Blog.updateOne(
+				    { _id: id },
+				    { $addToSet: { viewedBy: [{'userid':userId}] } },
+				    function(err, result) {
+				      if (err) {
+				        res.send(err);
+				      } else {
+				        //res.send(result);
+						        res.json({
+		                data
+		           });
+						      }
+				    }
+				  );
+
+		
 		
 	})
 	
@@ -118,6 +138,29 @@ exports.photo=(req,res,next)=>{
 		return res.send(req.data.BlogImg.data)
 	
 	next()
+}
+
+
+//show top 6 posts(trending)
+exports.showTrendingBlog=(req,res)=>
+{
+		 Blog.aggregate([
+      {$unwind: "$viewedBy"},
+      {$group: {_id: null,viewsCount: {$sum: 1}}},
+      {$sort: {viewsCount: 1}},
+      {$limit:6},
+      {$project: {_id: 1}}
+    ]).exec((err,data)=>
+		 {
+		 	if(err)
+		 	{
+		 		console.log(err)
+		 	}
+		 	console.log(data)
+		 	res.json({data})
+		 }
+		 )
+
 }
 
 
@@ -145,4 +188,16 @@ exports.showdrafts=(req,res)=>
 	)
 
 }
+
+
+/*
+exports.UpdateViews=(req,res)=>
+{
+
+}
+
+*/
+
+
+
 
