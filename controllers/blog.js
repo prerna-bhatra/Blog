@@ -170,11 +170,7 @@ exports.showTrendingBlog=(req,res)=>
 		 					result
 		 			})
 		 		})
-			// ProjectModel.find({projectName: 'name'}).sort({viewCount: -1}).limit(5).exec( 
-			//     function(err, projects) {
-			//         ...
-			//     }
-			// );
+		
 
 }
 
