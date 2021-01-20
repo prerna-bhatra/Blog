@@ -57,7 +57,7 @@ exports.FetchPublicBlog=(req,res)=>
 	{
 		  if (err) {
                 return res.status(400).json({
-                    error: "Products not found"
+                    error: "Blogs not found"
                 });
             }
             res.json({
@@ -92,8 +92,8 @@ exports.ReadBlogById=(req,res)=>
 {
 
 	const id=req.params.blogId;
-	const userId=req.params.userId;
-	console.log("userid",userId)
+	//it will be 0 if user has cookies set in device otherwise 1
+	const uniqueView=req.params.uniqueView;
 	console.log(id)
 
 	Blog.findById(id).select("-BlogImg").exec((err,data)=>
@@ -104,13 +104,32 @@ exports.ReadBlogById=(req,res)=>
 				error:"blog not found"	
 			})
 		}
-
+					if(uniqueView==1)
+					{
+							console.log(uniqueView)
+							Blog.updateOne(
+							{_id:id},
+							{
+									ViewCounts:data.ViewCounts+1
+							},function(err,result)
+							{
+								console.log(result)
+									  res.json({
+							                data
+							          		 });
+							})
+					}
+					else
+					{
+							res.json({data});
+					}
+					
 					//console.log(data)
 					//console.log("user visiting first time so add a view on thee blog post")
 					//console.log(id,typeof(userId))
-					Blog.updateOne(
+					/*Blog.updateOne(
 				    { _id: id },
-				    { $addToSet: { viewedBy: [{'userid':userId}] } },
+				    { $addToSet: { viewedBy: [{'uniqueView':uniqueView}] } },
 				    function(err, result) {
 				      if (err) {
 				        res.send(err);
@@ -122,9 +141,7 @@ exports.ReadBlogById=(req,res)=>
 						      }
 				    }
 				  );
-
-		
-		
+				  */
 	})
 	
 }
@@ -144,22 +161,20 @@ exports.photo=(req,res,next)=>{
 //show top 6 posts(trending)
 exports.showTrendingBlog=(req,res)=>
 {
-		 Blog.aggregate([
-      {$unwind: "$viewedBy"},
-      {$group: {_id: null,viewsCount: {$sum: 1}}},
-      {$sort: {viewsCount: 1}},
-      {$limit:6},
-      {$project: {_id: 1}}
-    ]).exec((err,data)=>
-		 {
-		 	if(err)
-		 	{
-		 		console.log(err)
-		 	}
-		 	console.log(data)
-		 	res.json({data})
-		 }
-		 )
+		 
+		//show mostly viewed and if views are same then show latest created
+		 	Blog.find().select("-BlogImg").sort({ViewCounts:-1 ,createdAt:-1}).limit(6).exec(
+		 		function (err,result)
+		 		{
+		 			res.json({
+		 					result
+		 			})
+		 		})
+			// ProjectModel.find({projectName: 'name'}).sort({viewCount: -1}).limit(5).exec( 
+			//     function(err, projects) {
+			//         ...
+			//     }
+			// );
 
 }
 

@@ -8,7 +8,7 @@ const {createBlog,FetchPublicBlog,BlogById,photo,showdrafts,ReadBlogById,showTre
 
 
 router.post("/blog/:userId",createBlog)
-router.get("/ReadBlog/:blogId/:userId",ReadBlogById)
+router.get("/ReadBlog/:blogId/:uniqueView",ReadBlogById)
 router.get("/ShowTrendingBlog",showTrendingBlog)
 router.get("/blogs",FetchPublicBlog)
 router.get("/drafts/:userId",showdrafts)

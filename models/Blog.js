@@ -15,10 +15,15 @@ const BlogSchema=new mongoose.Schema({
     {
       type:String
     },
-    viewedBy:
+    ViewCounts:
+    {
+        type:Number,
+        default:0
+    }
+   /* viewedBy:
     {
         type : Array 
-    }
+    }*/
     ,
     BlogHeading:
     {
