@@ -29,10 +29,10 @@ exports.createBlog=(req,res)=>
 			blog.BlogImg.contentType=files.BlogImg.type
 
 		}
-			console.log(blog)
-
+			//console.log(blog)
+			console.log("blog",blog.hashTags)
 		blog.save((err,data)=>
-	{
+		{
 		if(err)
 		{
 			return res.status(400).json({
@@ -40,10 +40,11 @@ exports.createBlog=(req,res)=>
 			})
 		}
 		res.json(data)
-	})
+		})
+
 	})	
     
-}
+   }
 
 
 
@@ -69,6 +70,33 @@ exports.FetchPublicBlog=(req,res)=>
 
 
 }
+
+//show recently Added Blogs
+
+
+//search by hashtags
+exports.SearchByHashTag=(req,res)=>
+{
+	//const HashTag=new Blog(fields)
+	console.log(req.body)
+	console.log(req.body.hashtag)
+	//const 
+	Blog.find({$text:{$search:req.body.hashtag}})
+	.select("_id BlogHeading")
+	.exec((err,data)=>
+	{
+		if(err)
+		{
+			console.log(err)
+		}
+		console.log(data)
+		res.json({data})
+	}
+	)
+
+
+}
+
 
 
 exports.BlogById=(req,res,next,id)=>

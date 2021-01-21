@@ -46,16 +46,19 @@ const BlogSchema=new mongoose.Schema({
         //this will be saved after we publish the draft
           type:String
     },
-    hashTags:
-    {
-        type:[String]
-    }
+    hashTags: 
+          {
+            type:String
+          }
+            
 
 },
 {
 	timestamps:true
 }
 );
+
+BlogSchema.index({hashTags:'text'})
 
 module.exports=mongoose.model("Blogs",BlogSchema);
 
