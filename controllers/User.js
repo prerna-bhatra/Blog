@@ -44,6 +44,9 @@ exports.signup=(req,res)=>
    
 };
 
+
+
+
 exports.signin=(req,res)=>
 {
 	//find the user on email

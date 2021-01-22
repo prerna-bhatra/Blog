@@ -492,3 +492,21 @@ exports.showdrafts=(req,res)=>
 
 }
 
+
+exports.DeleteDraft=(req,res)=>
+{
+		const Draftid=req.params.EditDraftId
+		EditedDraftModel.remove({_id:Draftid},function(err,result){
+			//console.log(result)
+			if(err)
+			{
+				res.send({"Error":err})
+			}
+
+			res.send({"Success":"deleted"})
+
+		})	
+}
+
+
+

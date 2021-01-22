@@ -1,4 +1,5 @@
 const Blog=require('../models/Blog.js')
+
 var formidable = require('formidable');
 const lodash= require('lodash');
 var fs = require('fs');
@@ -48,27 +49,27 @@ exports.createBlog=(req,res)=>
 
 
 
-
-
 exports.FetchPublicBlog=(req,res)=>
 {
-	Blog.find({SaveMode:1})
-	.select("-BlogImg")
-	.exec((err,data)=>
-	{
-		  if (err) {
-                return res.status(400).json({
-                    error: "Blogs not found"
-                });
-            }
-            res.json({
-                size: data.length,
-                data
-            });
-	}
-	)
+	Blog.find({SaveMode:1}).select("ViewCounts createdAt").sort({ViewCounts:1, _id: 1}).limit(5)
+	.exec(
+		 function (err,result)
+		 {
+
+		 res.json({
+		 	result
+		      })
+		 		})
+}
 
 
+
+exports.DeleteDraft=(req,res)=>
+{
+		const Blogid=req.params.blogId
+		Ed.remove({_id:Blogid},function(err,result){
+			console.log(result)
+		})	
 }
 
 //show recently Added Blogs
@@ -78,11 +79,11 @@ exports.FetchPublicBlog=(req,res)=>
 exports.SearchByHashTag=(req,res)=>
 {
 	//const HashTag=new Blog(fields)
-	console.log(req.body)
+	console.log("body",req.body)
 	console.log(req.body.hashtag)
 	//const 
 	Blog.find({$text:{$search:req.body.hashtag}})
-	.select("_id BlogHeading")
+	.select("-BlogImg")
 	.exec((err,data)=>
 	{
 		if(err)
@@ -93,8 +94,6 @@ exports.SearchByHashTag=(req,res)=>
 		res.json({data})
 	}
 	)
-
-
 }
 
 
@@ -191,7 +190,22 @@ exports.showTrendingBlog=(req,res)=>
 {
 		 
 		//show mostly viewed and if views are same then show latest created
-		 	Blog.find().select("-BlogImg").sort({ViewCounts:-1 ,createdAt:-1}).limit(6).exec(
+		 	Blog.find({SaveMode:1}).select("-BlogImg").sort({ViewCounts:-1 ,createdAt:-1}).limit(6).exec(
+		 		function (err,result)
+		 		{
+		 			res.json({
+		 					result
+		 			})
+		 		})
+		
+
+}
+
+exports.showNewBlog=(req,res)=>
+{
+		 
+		//show mostly viewed and if views are same then show latest created
+		 	Blog.find({SaveMode:1}).select("-BlogImg").sort({createdAt:-1}).limit(6).exec(
 		 		function (err,result)
 		 		{
 		 			res.json({

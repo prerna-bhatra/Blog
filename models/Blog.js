@@ -20,10 +20,6 @@ const BlogSchema=new mongoose.Schema({
         type:Number,
         default:0
     }
-   /* viewedBy:
-    {
-        type : Array 
-    }*/
     ,
     BlogHeading:
     {
@@ -34,7 +30,7 @@ const BlogSchema=new mongoose.Schema({
     {
        type:String,
         required:true
-      //  required:true
+     
     },
     BlogImg:
     {
@@ -50,8 +46,6 @@ const BlogSchema=new mongoose.Schema({
           {
             type:String
           }
-            
-
 },
 {
 	timestamps:true
