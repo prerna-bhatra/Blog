@@ -507,6 +507,3 @@ exports.DeleteDraft=(req,res)=>
 
 		})	
 }
-
-
-

@@ -1,5 +1,4 @@
 const Blog=require('../models/Blog.js')
-
 var formidable = require('formidable');
 const lodash= require('lodash');
 var fs = require('fs');
@@ -51,7 +50,7 @@ exports.createBlog=(req,res)=>
 
 exports.FetchPublicBlog=(req,res)=>
 {
-	Blog.find({SaveMode:1}).select("ViewCounts createdAt").sort({ViewCounts:1, _id: 1}).limit(5)
+	Blog.find({SaveMode:1}).select("-BlogImg").sort({ViewCounts:-1,createdAt:-1}).skip(6)
 	.exec(
 		 function (err,result)
 		 {
@@ -59,18 +58,11 @@ exports.FetchPublicBlog=(req,res)=>
 		 res.json({
 		 	result
 		      })
-		 		})
+		 })
 }
 
 
 
-exports.DeleteDraft=(req,res)=>
-{
-		const Blogid=req.params.blogId
-		Ed.remove({_id:Blogid},function(err,result){
-			console.log(result)
-		})	
-}
 
 //show recently Added Blogs
 
