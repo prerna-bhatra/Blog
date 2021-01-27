@@ -15,10 +15,19 @@ const BlogSchema=new mongoose.Schema({
     {
       type:String
     },
-    ViewCounts:
+    ViewStats:
     {
-        type:Number,
-        default:0
+       // "fingerPrint":
+       // {
+       //  "type": String,
+       //  "value": []
+       // },
+       //  "dateonview":
+       //  {
+       //  "type":Number,
+       //  "value":[]
+       //   }
+       type:[]
     }
     ,
     BlogHeading:

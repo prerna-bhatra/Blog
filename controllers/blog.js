@@ -112,55 +112,86 @@ exports.ReadBlogById=(req,res)=>
 
 	const id=req.params.blogId;
 	//it will be 0 if user has cookies set in device otherwise 1
-	const uniqueView=req.params.uniqueView;
+	const fingerprint=req.params.fingerprint;
 	console.log(id)
+
 
 	Blog.findById(id).select("-BlogImg").exec((err,data)=>
 	{
+
 		if(err || !data)
 		{
 			return res.status(400).json({
 				error:"blog not found"	
 			})
-		}
-					if(uniqueView==1)
-					{
-							console.log(uniqueView)
-							Blog.updateOne(
+
+		}	
+					var today = new Date();
+					var dd = String(today.getDate()).padStart(2, '0');
+					var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+					var yyyy = today.getFullYear();
+					today = mm + '/' + dd + '/' + yyyy;
+					let Item=[]
+					console.log("DATA AT 135",data)
+					//console.log("ViewStats obj",typeof(JSON.parse(data.ViewStats[0])))
+					 data.ViewStats.forEach(ConvertStringObj)	
+					 console.log("138")
+					 function ConvertStringObj(item,index)
+					 {
+					 	 Item[index]=data.ViewStats[index]
+					 }
+					 console.log("objArray",Item)
+					 //console.log(JSON.parse(data.ViewStats[0]))
+					 let flag= Item.find(flag=>flag.fingerPrint==fingerprint)
+					 console.log("flag",flag)
+					 let ViewStatsData={"fingerPrint":fingerprint,"dateonview":today}
+					 console.log("TESTING")
+					 if(flag==undefined)
+					 {
+					 	console.log("not found")
+					 	Blog.updateOne(
 							{_id:id},
 							{
-									ViewCounts:data.ViewCounts+1
-							},function(err,result)
+								//ViewStats:ViewStatsData
+								$addToSet:{ViewStats:ViewStatsData}
+							}
+							,function(err,result)
 							{
 								console.log(result)
 									  res.json({
 							                data
 							          		 });
 							})
-					}
-					else
-					{
-							res.json({data});
-					}
+					 }
+					 else
+					 {
+					 	console.log("found")
+					 		res.json({data});
+					 }
+
+
+					//console.log("fingerprint params",typeof(fingerprint))
+					//let obj = objArray.find(obj => obj.id == 3);
 					
-					//console.log(data)
-					//console.log("user visiting first time so add a view on thee blog post")
-					//console.log(id,typeof(userId))
-					/*Blog.updateOne(
-				    { _id: id },
-				    { $addToSet: { viewedBy: [{'uniqueView':uniqueView}] } },
-				    function(err, result) {
-				      if (err) {
-				        res.send(err);
-				      } else {
-				        //res.send(result);
-						        res.json({
-		                data
-		           });
-						      }
-				    }
-				  );
-				  */
+					// if(uniqueView==1)
+					// {
+					// 		console.log(uniqueView)
+					// 		Blog.updateOne(
+					// 		{_id:id},
+					// 		{
+					// 				ViewCounts:data.ViewCounts+1
+					// 		},function(err,result)
+					// 		{
+					// 			console.log(result)
+					// 				  res.json({
+					// 		                data
+					// 		          		 });
+					// 		})
+					// }
+					// else
+					// {
+					// 		res.json({data});
+					// }			
 	})
 	
 }
@@ -234,6 +265,30 @@ exports.showdrafts=(req,res)=>
 
 }
 
+exports.showMyBlogs=(req,res)=>
+{
+	const Userid=(req.profile._id).toString()
+	console.log(typeof(Userid))
+	console.log(req.profile)
+
+	Blog.find({SaveMode:1,UserId:Userid})
+	.select("-BlogImg")
+	.exec((err,data)=>
+	{
+		if(err)
+		{
+			return res.status(400).json({
+				error:"blog not found"	
+			})	
+			
+		}
+		res.json({
+                data
+           });
+	}
+	)
+
+}
 
 /*
 exports.UpdateViews=(req,res)=>
