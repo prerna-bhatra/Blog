@@ -113,7 +113,7 @@ exports.ReadBlogById=(req,res)=>
 	const id=req.params.blogId;
 	//it will be 0 if user has cookies set in device otherwise 1
 	const fingerprint=req.params.fingerprint;
-	console.log(id)
+	console.log("fingerprint params",fingerprint)
 
 
 	Blog.findById(id).select("-BlogImg").exec((err,data)=>
@@ -145,6 +145,8 @@ exports.ReadBlogById=(req,res)=>
 					 let flag= Item.find(flag=>flag.fingerPrint==fingerprint)
 					 console.log("flag",flag)
 					 let ViewStatsData={"fingerPrint":fingerprint,"dateonview":today}
+					 console.log("ViewStatsData",ViewStatsData)
+					 console.log("fingerPrint type",typeof(ViewStatsData.fingerPrint))
 					 console.log("TESTING")
 					 if(flag==undefined)
 					 {
