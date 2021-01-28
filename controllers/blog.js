@@ -112,7 +112,7 @@ exports.ReadBlogById=(req,res)=>
 
 		console.log("ReadBlogById function")
 	const id=req.params.blogId;
-	//it will be 0 if user has cookies set in device otherwise 1
+	
 	const fingerprint=req.params.fingerprint;
 	console.log("fingerprint params update",fingerprint)
 
