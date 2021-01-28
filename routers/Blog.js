@@ -11,8 +11,9 @@ const {createBlog,FetchPublicBlog,BlogById,photo,showdrafts,ReadBlogById,showTre
 //post requests
 router.post("/blog/:userId",createBlog)
 router.post("/SearchByHashTag",SearchByHashTag)
+router.post("/ReadBlog/:blogId/:fingerprint",ReadBlogById)
 //get requests
-router.get("/ReadBlog/:blogId/:fingerprint",ReadBlogById)
+
 router.get("/ShowTrendingBlog",showTrendingBlog)
 router.get("/ShowNewBlog",showNewBlog)
 router.get("/blogs",FetchPublicBlog)
