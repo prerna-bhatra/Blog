@@ -162,39 +162,33 @@ exports.ReadBlogById=(req,res)=>
 							{
 								console.log(result)
 									  res.json({
-							                data
+							                data:
+							                {
+							                	"_id":data._id,
+							                	"BlogHeading":data.BlogHeading,
+							                	"BlogContent":data.BlogContent,
+							                	"ViewCount":data.ViewStats.length
+							                }
 							          		 });
+							                
 							})
 					 }
 					 else
 					 {
 					 	console.log("found")
-					 		res.json({data});
+					 		res.json({
+					 			 data:
+							                {
+							                	"_id":data._id,
+							                	"BlogHeading":data.BlogHeading,
+							                	"BlogContent":data.BlogContent,
+							                	"ViewCount":data.ViewStats.length
+							                }
+					 		});
 					 }
 
 
-					//console.log("fingerprint params",typeof(fingerprint))
-					//let obj = objArray.find(obj => obj.id == 3);
-					
-					// if(uniqueView==1)
-					// {
-					// 		console.log(uniqueView)
-					// 		Blog.updateOne(
-					// 		{_id:id},
-					// 		{
-					// 				ViewCounts:data.ViewCounts+1
-					// 		},function(err,result)
-					// 		{
-					// 			console.log(result)
-					// 				  res.json({
-					// 		                data
-					// 		          		 });
-					// 		})
-					// }
-					// else
-					// {
-					// 		res.json({data});
-					// }			
+				
 	})
 	
 }
