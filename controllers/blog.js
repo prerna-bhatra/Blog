@@ -210,7 +210,7 @@ exports.showTrendingBlog=(req,res)=>
 {
 		 
 		//show mostly viewed and if views are same then show latest created
-		 	Blog.find({SaveMode:1}).select("-BlogImg").sort({ViewCounts:-1 ,createdAt:-1}).limit(6).exec(
+		 	Blog.find({SaveMode:1}).select("-BlogImg").sort({ViewStats.length:-1 ,createdAt:-1}).limit(6).exec(
 		 		function (err,result)
 		 		{
 		 			res.json({
