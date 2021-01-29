@@ -120,8 +120,7 @@ exports.signout=(req,res)=>
 						  				{new: true, upsert: true},function (err,data)
 						  				{
 						  					console.log("vgxvhgdv")
-						  				const {_id,name,email,role,address,contact}=user	
-	res.json({message:"Signout success"});
+										res.json({message:"Signout success"});
 						  				}	
 						  				)
 
