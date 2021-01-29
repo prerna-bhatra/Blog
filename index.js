@@ -11,7 +11,7 @@ const draftRoutes=require('./routers/EditDraft')
 const cookieParser = require('cookie-parser')
 const app =express()
 
-const connect = mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+const connect = mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true ,useCreateIndex: true})
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err));
 
