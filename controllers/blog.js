@@ -132,16 +132,15 @@ exports.ReadBlogById=(req,res)=>
 						  							console.log(data)
 						  							if(data.ReadCount.length<5)
 						  							{
-						  									Blog.findById(id).select("-BlogImg").exec( (err,data)=>
-													{
+						  									Blog.findById(id).select("-BlogImg").exec( (err,data)=>{
 
-											if(err || !data)
-											{
-												return res.status(400).json({
-													error:"blog not found"	
-												})
+																	if(err || !data)
+																	{
+																		return res.status(400).json({
+																			error:"blog not found"	
+																		})
 
-											}	
+																	}	
 			//store fingerprint in fingerpritn model if not present otherwise update (upsert)USING OUT UPSERT
 
 					
@@ -149,28 +148,28 @@ exports.ReadBlogById=(req,res)=>
 
 
 						//storefingerprint in blog viewwstats 
-										var today = new Date();
-										var dd = String(today.getDate()).padStart(2, '0');
-										var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-										var yyyy = today.getFullYear();
-										today = mm + '/' + dd + '/' + yyyy;
-										let Item=[]
-										// console.log("DATA AT 135",data)
-										//console.log("ViewStats obj",typeof(JSON.parse(data.ViewStats[0])))
-										 data.ViewStats.forEach(ConvertStringObj)	
-										// console.log("138")
-										 function ConvertStringObj(item,index)
-										 {
-										 	 Item[index]=data.ViewStats[index]
-										 }
-										/// console.log("objArray",Item)
-										 //console.log(JSON.parse(data.ViewStats[0]))
-										 let flag= Item.find(flag=>flag.fingerPrint==fingerprint)
-										 // console.log("flag",flag)
-										 let ViewStatsData={"fingerPrint":fingerprint,"dateonview":today}
-										 // console.log("ViewStatsData",ViewStatsData)
-										 // console.log("fingerPrint type",typeof(ViewStatsData.fingerPrint))
-										// console.log("TESTING")
+																	var today = new Date();
+																	var dd = String(today.getDate()).padStart(2, '0');
+																	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+																	var yyyy = today.getFullYear();
+																	today = mm + '/' + dd + '/' + yyyy;
+																	let Item=[]
+																	// console.log("DATA AT 135",data)
+																	//console.log("ViewStats obj",typeof(JSON.parse(data.ViewStats[0])))
+																	 data.ViewStats.forEach(ConvertStringObj)	
+																	// console.log("138")
+																	 function ConvertStringObj(item,index)
+																	 {
+																	 	 Item[index]=data.ViewStats[index]
+																	 }
+																	/// console.log("objArray",Item)
+																	 //console.log(JSON.parse(data.ViewStats[0]))
+																	 let flag= Item.find(flag=>flag.fingerPrint==fingerprint)
+																	 // console.log("flag",flag)
+																	 let ViewStatsData={"fingerPrint":fingerprint,"dateonview":today}
+																	 // console.log("ViewStatsData",ViewStatsData)
+																	 // console.log("fingerPrint type",typeof(ViewStatsData.fingerPrint))
+																	// console.log("TESTING")
 										 if(flag==undefined)
 										 {
 												 	console.log("not found")
@@ -211,8 +210,13 @@ exports.ReadBlogById=(req,res)=>
 													})
 						  			}
 						  			
-						  			else if(data.isUser===1 || data.ReadCount.findIndex(id)<4)
+
+
+						  			else if(data.isUser===1 || data.ReadCount.findindex(id)>0  && data.ReadCount.findindex(id)<4 )
 						  			{
+						  				console.log('LOOOPPP');
+						  				console.log(data.ReadCount, id);
+
 						  									Blog.findById(id).select("-BlogImg").exec( (err,data)=>
 													{
 
