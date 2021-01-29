@@ -113,6 +113,17 @@ exports.userById=(req,res,next,id)=>
 
 exports.signout=(req,res)=>
 {
+		const fingerprint=req.params.fingerprint;
+
+		FingerPrintModel.findOneAndUpdate({FingerPrintField:fingerprint}, {
+						  				$set: {FingerPrintField: fingerprint,isUser:0}}, 
+						  				{new: true, upsert: true},function (err,data)
+						  				{
+						  					console.log("vgxvhgdv")
+						  				const {_id,name,email,role,address,contact}=user
+										return res.json({token,user:{_id,email,name,role}});
+						  				}	
+						  				)
 	
 	res.json({message:"Signout success"});
 }
