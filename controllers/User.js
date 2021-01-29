@@ -116,7 +116,7 @@ exports.signout=(req,res)=>
 		const fingerprint=req.params.fingerprint;
 
 		FingerPrintModel.findOneAndUpdate({FingerPrintField:fingerprint}, {
-						  				$set: {FingerPrintField: fingerprint,isUser:0}}, 
+						  				$set: {isUser:0}}, 
 						  				{new: true, upsert: true},function (err,data)
 						  				{
 						  					console.log("vgxvhgdv")
