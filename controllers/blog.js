@@ -212,7 +212,7 @@ exports.ReadBlogById=(req,res)=>
 						  			
 
 
-						  			else if(data.isUser===1 || data.ReadCount.findindex(id)>0  && data.ReadCount.findindex(id)<4 )
+						  			else if(data.isUser===1 || data.ReadCount.findIndex(id)>0  && data.ReadCount.findIndex(id)<4 )
 						  			{
 						  				console.log('LOOOPPP');
 						  				console.log(data.ReadCount, id);
