@@ -119,7 +119,7 @@ exports.ReadBlogById=(req,res)=>
 	console.log("fingerprint params update",fingerprint)
 
 					FingerPrintModel.findOneAndUpdate({FingerPrintField:fingerprint}, {
-						  				$inc: {ReadCount: 1}, 
+						  				$addToSet: {ReadCount: id}, 
 						  				$set: {FingerPrintField: fingerprint}}, 
 						  				{new: true, upsert: true},function (err,data)
 						  				{
@@ -130,7 +130,7 @@ exports.ReadBlogById=(req,res)=>
 						  						else
 						  						{
 						  							console.log(data)
-						  							if(data.ReadCount<5)
+						  							if(data.ReadCount.length<5)
 						  							{
 						  									Blog.findById(id).select("-BlogImg").exec( (err,data)=>
 													{
@@ -213,8 +213,90 @@ exports.ReadBlogById=(req,res)=>
 						  			else if(data.isUser===0)
 						  			{
 						  				res.send({
-						  					Login:"Please login to access all blogs"
+						  					Login:"You have rad maximum limit ,Now Please login to access rest blogs"
 						  				})
+
+
+						  			}
+						  			else if(data.isUser===1)
+						  			{
+						  									Blog.findById(id).select("-BlogImg").exec( (err,data)=>
+													{
+
+											if(err || !data)
+											{
+												return res.status(400).json({
+													error:"blog not found"	
+												})
+
+											}	
+			//store fingerprint in fingerpritn model if not present otherwise update (upsert)USING OUT UPSERT
+
+					
+						
+
+
+						//storefingerprint in blog viewwstats 
+										var today = new Date();
+										var dd = String(today.getDate()).padStart(2, '0');
+										var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+										var yyyy = today.getFullYear();
+										today = mm + '/' + dd + '/' + yyyy;
+										let Item=[]
+										// console.log("DATA AT 135",data)
+										//console.log("ViewStats obj",typeof(JSON.parse(data.ViewStats[0])))
+										 data.ViewStats.forEach(ConvertStringObj)	
+										// console.log("138")
+										 function ConvertStringObj(item,index)
+										 {
+										 	 Item[index]=data.ViewStats[index]
+										 }
+										/// console.log("objArray",Item)
+										 //console.log(JSON.parse(data.ViewStats[0]))
+										 let flag= Item.find(flag=>flag.fingerPrint==fingerprint)
+										 // console.log("flag",flag)
+										 let ViewStatsData={"fingerPrint":fingerprint,"dateonview":today}
+										 // console.log("ViewStatsData",ViewStatsData)
+										 // console.log("fingerPrint type",typeof(ViewStatsData.fingerPrint))
+										// console.log("TESTING")
+										 if(flag==undefined)
+										 {
+												 	console.log("not found")
+												 	Blog.updateOne(
+														{_id:id},
+														{
+															//ViewStats:ViewStatsData
+															$addToSet:{ViewStats:ViewStatsData}
+														}
+														,function(err,result)
+														{
+															console.log(result)
+																  res.json({
+														                data:
+														                {
+														                	"_id":data._id,
+														                	"BlogHeading":data.BlogHeading,
+														                	"BlogContent":data.BlogContent,
+														                	"ViewCount":data.ViewStats.length
+														                }
+														          		 });
+														                
+														})
+												 }
+												 else
+												 {
+												 	// console.log("found")
+												 		res.json({
+												 			 data:
+														                {
+														                	"_id":data._id,
+														                	"BlogHeading":data.BlogHeading,
+														                	"BlogContent":data.BlogContent,
+														                	"ViewCount":data.ViewStats.length
+														                }
+												 		});
+												 }
+													})
 
 
 						  			}

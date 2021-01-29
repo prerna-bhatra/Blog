@@ -1,4 +1,5 @@
 const User=require('../models/User.js')
+const FingerPrintModel=require('../models/FingerPrint.js')
 const jwt=require('jsonwebtoken');
 var expressJwt=require('express-jwt')
 
@@ -74,10 +75,20 @@ exports.signin=(req,res)=>
 		//persist the token as 't' in cookie with expiry date
 
 		res.cookie('t',token,{expire:new Date()+9999})
+		const fingerprint=req.params.fingerprint;
 
+		FingerPrintModel.findOneAndUpdate({FingerPrintField:fingerprint}, {
+						  				$set: {FingerPrintField: fingerprint,isUser:1}}, 
+						  				{new: true, upsert: true},function (err,data)
+						  				{
+						  					console.log("vgxvhgdv")
+						  				const {_id,name,email,role,address,contact}=user
+										return res.json({token,user:{_id,email,name,role}});
+						  				}	
+						  				)
+		console.log("LET'S TRY")
 		//return response
-		const {_id,name,email,role,address,contact}=user
-		return res.json({token,user:{_id,email,name,role}});
+		
 
 	})
 }

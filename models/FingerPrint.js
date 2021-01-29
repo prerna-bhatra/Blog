@@ -8,13 +8,14 @@ const FingerPrintSchema=new mongoose.Schema({
     },
     ReadCount:
     {
-        type:Number,
+        type:[],
         default:0
     },
     isUser:
     {
         type:Number,
-        default:0
+        default:0,
+        require:true
     }
 
 },
