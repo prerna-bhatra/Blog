@@ -3,17 +3,20 @@ const mongoose=require("mongoose");
 const BlogSchema=new mongoose.Schema({
 	UserId:
 	{
-		type:Object
+		type:Object,
+     require:true
     }
     ,
     SaveMode:
     {
-        type:Number
+        type:Number,
+        require:true
     }
     ,
     UserName:
     {
-      type:String
+      type:String,
+       require:true
     },
     ViewStats:
     {
@@ -44,7 +47,7 @@ const BlogSchema=new mongoose.Schema({
     BlogImg:
     {
        data: Buffer,
-        contentType: String
+      contentType: String
     },
     DraftId:
     {
