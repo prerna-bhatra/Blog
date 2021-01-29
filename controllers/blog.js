@@ -223,9 +223,9 @@ exports.ReadBlogById=(req,res)=>
 						  				console.log(Arr, id)
 						  				console.log(Arr.indexOf(id));
 
-						  				return;
+						  				
 
-						  									Blog.findById(id).select("-BlogImg").exec( (err,data)=>
+						  							Blog.findById(id).select("-BlogImg").exec( (err,data)=>
 													{
 
 														if(err || !data)
