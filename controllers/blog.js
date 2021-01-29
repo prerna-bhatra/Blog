@@ -211,7 +211,7 @@ exports.ReadBlogById=(req,res)=>
 													})
 						  			}
 						  			
-						  			else if(data.isUser===1 || data.ReadCount.findIndex(id)>4)
+						  			else if(data.isUser===1)
 						  			{
 						  									Blog.findById(id).select("-BlogImg").exec( (err,data)=>
 													{
