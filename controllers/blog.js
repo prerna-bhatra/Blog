@@ -212,10 +212,18 @@ exports.ReadBlogById=(req,res)=>
 						  			
 
 
-						  			else if(data.isUser===1 || data.ReadCount.findIndex(id)>0  && data.ReadCount.findIndex(id)<4 )
+						  			else if(data.isUser===1 || data.ReadCount.indexOf(id)>0  && data.ReadCount.indexOf(id)<4 )
 						  			{
 						  				console.log('LOOOPPP');
 						  				console.log(data.ReadCount, id);
+						  				//
+						  				console.log("TYPE",typeof(data.ReadCount))
+						  				console.log("CHECK ARRAY",Array.isArray(data.ReadCount))
+						  				const Arr=[...data.ReadCount]
+						  				console.log(Arr, id)
+						  				console.log(Arr.indexOf(id));
+
+						  				return;
 
 						  									Blog.findById(id).select("-BlogImg").exec( (err,data)=>
 													{
