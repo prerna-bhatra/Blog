@@ -5,7 +5,7 @@ const {signup,signin,signout}=require('../controllers/User');
 
 router.post("/signup",signup)
 router.post("/signin/:fingerprint",signin)
-router.get("/signout/:fingerprint",signout)
+router.post("/signout/:fingerprint",signout)
 
 
 module.exports=router;
