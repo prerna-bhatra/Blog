@@ -34,6 +34,11 @@ const userSchema=new mongoose.Schema({
 	{
 		type:Number,
 		require:true
+	},
+	ReadCount:
+	{
+		type:Number,
+		require:true
 	}
 },
 {

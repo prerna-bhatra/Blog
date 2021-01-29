@@ -1,3 +1,4 @@
+const FingerPrintModel=require('../models/FingerPrint.js')
 const Blog=require('../models/Blog.js')
 var formidable = require('formidable');
 const lodash= require('lodash');
@@ -114,6 +115,7 @@ exports.ReadBlogById=(req,res)=>
 	const id=req.params.blogId;
 	
 	const fingerprint=req.params.fingerprint;
+	console.log(typeof(fingerprint))
 	console.log("fingerprint params update",fingerprint)
 
 
@@ -127,13 +129,35 @@ exports.ReadBlogById=(req,res)=>
 			})
 
 		}	
+			//store fingerprint in fingerpritn model if not present otherwise update (upsert)USING OUT UPSERT
+
+						FingerPrintModel.update({FingerPrintField:fingerprint}, {
+						  $inc: {ReadCount: 1}, 
+						  $set: {FingerPrintField: fingerprint}
+						}, {upsert: true})
+						.exec((err,data)=>
+						{
+							if(err)
+							{
+								console.log("upsert",err)
+							}
+							else
+							{
+								console.log("upsert",data)
+							}
+							
+						})
+
+
+
+						//storefingerprint in blog viewwstats 
 					var today = new Date();
 					var dd = String(today.getDate()).padStart(2, '0');
 					var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 					var yyyy = today.getFullYear();
 					today = mm + '/' + dd + '/' + yyyy;
 					let Item=[]
-					console.log("DATA AT 135",data)
+					// console.log("DATA AT 135",data)
 					//console.log("ViewStats obj",typeof(JSON.parse(data.ViewStats[0])))
 					 data.ViewStats.forEach(ConvertStringObj)	
 					 console.log("138")
@@ -144,11 +168,11 @@ exports.ReadBlogById=(req,res)=>
 					 console.log("objArray",Item)
 					 //console.log(JSON.parse(data.ViewStats[0]))
 					 let flag= Item.find(flag=>flag.fingerPrint==fingerprint)
-					 console.log("flag",flag)
+					 // console.log("flag",flag)
 					 let ViewStatsData={"fingerPrint":fingerprint,"dateonview":today}
-					 console.log("ViewStatsData",ViewStatsData)
-					 console.log("fingerPrint type",typeof(ViewStatsData.fingerPrint))
-					 console.log("TESTING")
+					 // console.log("ViewStatsData",ViewStatsData)
+					 // console.log("fingerPrint type",typeof(ViewStatsData.fingerPrint))
+					// console.log("TESTING")
 					 if(flag==undefined)
 					 {
 					 	console.log("not found")
@@ -175,7 +199,7 @@ exports.ReadBlogById=(req,res)=>
 					 }
 					 else
 					 {
-					 	console.log("found")
+					 	// console.log("found")
 					 		res.json({
 					 			 data:
 							                {
@@ -188,8 +212,12 @@ exports.ReadBlogById=(req,res)=>
 					 }
 
 
+
 				
 	})
+
+
+
 	
 }
 
