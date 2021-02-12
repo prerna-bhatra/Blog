@@ -187,10 +187,11 @@ exports.ReadBlogById=(req,res)=>
 														                {
 														                	"_id":data._id,
 														                	"BlogHeading":data.BlogHeading,
+														                	"PublicComment":data.PublicComment,
 														                	"BlogContent":data.BlogContent,
 														                	"ViewCount":data.ViewStats.length,
-														                	"PrivateComment":data.PrivateComment,
-														                	"PublicComment":data.PublicComment
+														                	"PrivateComment":data.PrivateComment
+
 														                }
 														          		 });
 														                
@@ -204,10 +205,11 @@ exports.ReadBlogById=(req,res)=>
 														                {
 														                	"_id":data._id,
 														                	"BlogHeading":data.BlogHeading,
+														                	"PublicComment":data.PublicComment,
 														                	"BlogContent":data.BlogContent,
 														                	"ViewCount":data.ViewStats.length,
-														                	"PrivateComment":data.PrivateComment,
-														                	"PublicComment":data.PublicComment
+														                	"PrivateComment":data.PrivateComment
+														                	
 
 														                }
 												 		});
@@ -284,10 +286,13 @@ exports.ReadBlogById=(req,res)=>
 																  res.json({
 														                data:
 														                {
+														                	
 														                	"_id":data._id,
 														                	"BlogHeading":data.BlogHeading,
+														                	"PublicComment":data.PublicComment,
 														                	"BlogContent":data.BlogContent,
-														                	"ViewCount":data.ViewStats.length
+														                	"ViewCount":data.ViewStats.length,
+														                	"PrivateComment":data.PrivateComment
 														                }
 														          		 });
 														                
@@ -299,10 +304,13 @@ exports.ReadBlogById=(req,res)=>
 												 		res.json({
 												 			 data:
 														                {
+														                	
 														                	"_id":data._id,
 														                	"BlogHeading":data.BlogHeading,
+														                	"PublicComment":data.PublicComment,
 														                	"BlogContent":data.BlogContent,
-														                	"ViewCount":data.ViewStats.length
+														                	"ViewCount":data.ViewStats.length,
+														                	"PrivateComment":data.PrivateComment
 														                }
 												 		});
 												 }
