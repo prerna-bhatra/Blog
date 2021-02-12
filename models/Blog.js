@@ -54,6 +54,16 @@ const BlogSchema=new mongoose.Schema({
         //this will be saved after we publish the draft
           type:String
     },
+    PublicComment:
+    {
+      type:Number,
+      default:0
+    },
+    PrivateComment:
+    {
+      type:Number,
+      default:0
+    },
     hashTags: 
           {
             type:String

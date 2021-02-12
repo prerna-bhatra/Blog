@@ -188,7 +188,9 @@ exports.ReadBlogById=(req,res)=>
 														                	"_id":data._id,
 														                	"BlogHeading":data.BlogHeading,
 														                	"BlogContent":data.BlogContent,
-														                	"ViewCount":data.ViewStats.length
+														                	"ViewCount":data.ViewStats.length,
+														                	"PrivateComment":data.PrivateComment,
+														                	"PublicComment":data.PublicComment
 														                }
 														          		 });
 														                
@@ -203,7 +205,10 @@ exports.ReadBlogById=(req,res)=>
 														                	"_id":data._id,
 														                	"BlogHeading":data.BlogHeading,
 														                	"BlogContent":data.BlogContent,
-														                	"ViewCount":data.ViewStats.length
+														                	"ViewCount":data.ViewStats.length,
+														                	"PrivateComment":data.PrivateComment,
+														                	"PublicComment":data.PublicComment
+
 														                }
 												 		});
 												 }
