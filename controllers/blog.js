@@ -81,14 +81,10 @@ exports.SearchByHashTag=(req,res)=>
 	{
 		if(err)
 		{
-			console.log(err)
+			console.log('WEEE', err);
 		}
-		console.log(data)
-		res.json({data:
-			{
-				"BlogHeading:":data.BlogHeading,
-				"PublicComment":data.PublicComment
-			}})
+		console.log('OOOO',data)
+		res.json({data})
 	}
 	)
 }
