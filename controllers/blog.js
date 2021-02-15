@@ -84,7 +84,11 @@ exports.SearchByHashTag=(req,res)=>
 			console.log(err)
 		}
 		console.log(data)
-		res.json({data})
+		res.json({data:
+			{
+				"BlogHeading:":data.BlogHeading,
+				"PublicComment":data.PublicComment
+			}})
 	}
 	)
 }
