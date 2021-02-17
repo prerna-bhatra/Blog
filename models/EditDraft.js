@@ -32,9 +32,20 @@ const EditDeaftSchema=new mongoose.Schema({
         type:String,
         required:true
     },
-    version:
+    major:
     {
-        type:Number
+        type:Number,
+        default:1
+    },
+    minor:
+    {
+        type:Number,
+        default:0
+    },
+    build:
+    {
+        type:Number,
+        default:1
     },
     DummyId:
     {

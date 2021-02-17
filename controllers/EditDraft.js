@@ -32,23 +32,26 @@ exports.EditDraft=(req,res)=>
 				//console.log(data)
 				//console.log(Array.isArray(data))
 				const datesArray=[]
-				const VersionArray=[]
+				const MajorArray=[]
+				const BuildArray=[]
 				data.forEach(copydata)
 				function  copydata(item,index)
 				{
 					datesArray[index]=data[index].createdAt
-					VersionArray[index]=data[index].version
+					MajorArray[index]=data[index].major
+					BuildArray[index]=data[index].build
 				}
-				//console.log(VersionArray)
+				console.log(BuildArray)
 				var maxDate=new Date(Math.max.apply(null,datesArray)).toDateString();
 				var TodayDate = new Date().toDateString();
 
 				//console.log(maxDate,TodayDate)
 				if(maxDate===TodayDate)
 				{
-					//console.log("yes")
-					const LastVersion=Math.max(...VersionArray)
+					//console.log("yes") major will be same if date is same and build will be chnage everytime
+					const LastVersion=Math.max(...MajorArray)
 					const NewVersion=LastVersion;
+					const NewBuild=BuildArray[BuildArray.length-1]
 					//console.log(NewVersion)
 					let form=new formidable.IncomingForm()
 			 form.keepExtensions=true
@@ -71,7 +74,8 @@ exports.EditDraft=(req,res)=>
 					editdraft.BlogId=blogid;
 					editdraft.UserId=user._id;
 					editdraft.UserName=user.name
-					editdraft.version=NewVersion
+					editdraft.major=NewVersion
+					editdraft.build=NewBuild+1
 					console.log("and here should be fiinal data ")	
 						
 						editdraft.save((err,data)=>
@@ -145,8 +149,10 @@ exports.EditDraft=(req,res)=>
 				}
 				else
 				{
-						const LastVersion=Math.max(...VersionArray)
+					console.log('date chnage')
+						const LastVersion=Math.max(...MajorArray)
 						const NewVersion=LastVersion+1;
+
 						//console.log(NewVersion)
 						let form=new formidable.IncomingForm()
 			 form.keepExtensions=true
@@ -168,7 +174,9 @@ exports.EditDraft=(req,res)=>
 					editdraft.BlogId=blogid;
 						editdraft.UserId=user._id;
 						editdraft.UserName=user.name
-						editdraft.version=NewVersion
+						editdraft.major=NewVersion
+						editdraft.build=0
+						// editdraft.version=NewVersion
 					console.log("and here should be fiinal data ")	
 				
 				editdraft.save((err,data)=>
@@ -180,7 +188,7 @@ exports.EditDraft=(req,res)=>
 						error:"draft not created"
 					})
 				}
-				console.log("final data is saving or not ",data)
+				// console.log("final data is saving or not ",data)
 				res.json(data)
 			})
 
@@ -206,7 +214,7 @@ exports.EditDraft=(req,res)=>
 						editdraft.BlogId=blogid;
 						editdraft.UserId=user._id;
 						editdraft.UserName=user.name
-						editdraft.version=NewVersion
+						editdraft.build=0
 						console.log('LETS BE HONEST');
 						console.log(editdraft);
 							editdraft.save((err,data)=>
@@ -256,7 +264,6 @@ exports.EditDraft=(req,res)=>
 						editdraft.BlogId=blogid;
 						editdraft.UserId=user._id;
 						editdraft.UserName=user.name
-						editdraft.version=1
 				editdraft.save((err,data)=>
 			{
 				//console.log(err)
