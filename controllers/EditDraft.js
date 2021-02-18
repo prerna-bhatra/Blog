@@ -122,7 +122,8 @@ exports.EditDraft=(req,res)=>
 						editdraft.BlogId=blogid;
 						editdraft.UserId=user._id;
 						editdraft.UserName=user.name
-						editdraft.version=NewVersion
+						editdraft.major=NewVersion
+						editdraft.build=NewBuild+1
 					console.log("and here should be fiinal data ")	
 				
 				editdraft.save((err,data)=>
@@ -214,6 +215,7 @@ exports.EditDraft=(req,res)=>
 						editdraft.BlogId=blogid;
 						editdraft.UserId=user._id;
 						editdraft.UserName=user.name
+						editdraft.major=NewVersion
 						editdraft.build=0
 						console.log('LETS BE HONEST');
 						console.log(editdraft);
@@ -254,27 +256,72 @@ exports.EditDraft=(req,res)=>
 				let editdraft=new EditedDraftModel(fields)
 				//console.log(editdraft)
 				//console.log("files",files)
+				console.log("image file",files.EditedImg)
 				if(files.EditedImg!==undefined)
 				{
 					editdraft.EditedImg.data=fs.readFileSync(files.EditedImg.path)
 					editdraft.EditedImg.contentType=files.EditedImg.type
+					editdraft.BlogId=blogid;
+					editdraft.UserId=user._id;
+					editdraft.UserName=user.name
+						editdraft.save((err,data)=>
+							{
+								//console.log(err)
+								if(err)
+								{
+									return res.status(400).json({
+										error:"draft not created"
+									})
+								}
+								res.json(data)
+							})
+
+				}
+				else
+				{
+					// const id = new ObjectID(editdraft.DummyId);
+
+					console.log("version 0 no file choosen so we will take the previous file as it is from blogs")
+					 Blog.findById(blogid)
+					 .exec((err,Blogdata)=>
+					 {
+					 	if(err)
+					 	{
+					 		console.log("err",err)
+					 	}
+					 	if(Blogdata)
+					 	{
+
+					 		console.log("Blog Data",Blogdata)
+					 		editdraft.BlogId=blogid;
+							editdraft.UserId=user._id;
+							editdraft.UserName=user.name
+							editdraft.EditedImg=Object.assign(editdraft.EditedImg,Blogdata.BlogImg)
+
+							console.log("new data HEY HEY ",editdraft)
+
+							editdraft.save((err,data)=>
+								{
+									//console.log(err)
+									if(err)
+									{
+										return res.status(400).json({
+											error:"draft not created"
+										 })
+									}
+									res.json(data)
+								})
+						}
+
+								 })
+
 
 				}
 					//console.log(EditedDraftModel)
-						editdraft.BlogId=blogid;
-						editdraft.UserId=user._id;
-						editdraft.UserName=user.name
-				editdraft.save((err,data)=>
-			{
-				//console.log(err)
-				if(err)
-				{
-					return res.status(400).json({
-						error:"draft not created"
-					})
-				}
-				res.json(data)
-			})
+						
+							//major and build will be set by default
+				
+			
 			})	
 			}
 
@@ -410,6 +457,7 @@ exports.FetchEditedDraft=(req,res)=>
 	}
 	)
 }
+
 
 
 
