@@ -334,6 +334,7 @@ exports.EditDraft=(req,res)=>
 
 exports.PublishDraft=(req,res)=>
 {
+
 	const blogid=req.params.blogId
 	const user=req.profile
 	const drefatId=req.params.EditDraftId
@@ -348,9 +349,10 @@ exports.PublishDraft=(req,res)=>
 						error:'Image could not be uploaded'
 					})
 				}
+				console.log('form fields',fields)
 				let publishDraft=new Blog(fields)
-				console.log("new fields",publishDraft)
-				console.log("DrfatId",req.params.EditDraftId)
+				// console.log("new fields",publishDraft)
+				// console.log("DrfatId",req.params.EditDraftId)
 				if(files.BlogImg===undefined)
 				{
 					//it means user is not  changing none of the data then we will update only saveMode  and make it public 
@@ -423,6 +425,7 @@ exports.PublishDraft=(req,res)=>
 					  			console.log(err)
 					  		}
 					  		console.log("after update",res)
+
 					  })
 					
 
