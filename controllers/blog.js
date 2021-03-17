@@ -10,7 +10,7 @@ exports.createBlog=(req,res)=>
 {
 	console.log(req.body)
 	 let form=new formidable.IncomingForm()
-	 //console.log(form)
+	 // console.log(form)
 	 //console.log(typeof(form))
 	 form.keepExtensions=true
 	form.parse(req,(err,fields,files)=>
@@ -23,7 +23,8 @@ exports.createBlog=(req,res)=>
 		}
 		let blog=new Blog(fields)
 		//console.log(blog)
-		console.log("files",files)
+		// console.log("files",files)
+		console.log("IMAGE ",files.BlogImg.name)
 		if(files.BlogImg)
 		{
 			blog.BlogImg.data=fs.readFileSync(files.BlogImg.path)
@@ -62,12 +63,6 @@ exports.FetchPublicBlog=(req,res)=>
 		 })
 }
 
-
-
-
-//show recently Added Blogs
-
-
 //search by hashtags
 exports.SearchByHashTag=(req,res)=>
 {
@@ -75,7 +70,7 @@ exports.SearchByHashTag=(req,res)=>
 	console.log("body",req.body)
 	console.log(req.body.hashtag)
 	//const 
-	Blog.find({$text:{$search:req.body.hashtag}})
+	Blog.find({ "hashTags" : { $regex:".*"+req.body.hashtag+".*" }})
 	.select("-BlogImg")
 	.exec((err,data)=>
 	{
@@ -83,9 +78,35 @@ exports.SearchByHashTag=(req,res)=>
 		{
 			console.log('WEEE', err);
 		}
-		console.log('OOOO',data)
-		res.json({data})
+	res.json({
+		data
+	})
 	}
+	// Blog.find({$text:{$search:req.body.hashtag}})
+	// .select("-BlogImg")
+	// .exec((err,data)=>
+	// {
+	// 	if(err)
+	// 	{
+	// 		console.log('WEEE', err);
+	// 	}
+	// 	console.log('OOOO',data)
+	// 	let SearchedData=[]
+
+		
+	// 	for(let i=0;i<data.length;i++)
+	// 	{
+	// 		// SearchedData[i]._id=data[i]._id
+	// 		// SearchedData[i].Headings=data[i].BlogHeading
+	// 		SearchedData.push({_id:data[i]._id,Headings:data[i].BlogHeading})
+
+	// 	}
+	// 	res.json({data:
+	// 		{
+	// 			SearchedData
+	// 		}})
+	// }
+	// )
 	)
 }
 

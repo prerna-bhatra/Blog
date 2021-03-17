@@ -16,7 +16,7 @@ const BlogSchema=new mongoose.Schema({
     UserName:
     {
       type:String,
-       require:true
+      //  require:true
     },
     ViewStats:
     {

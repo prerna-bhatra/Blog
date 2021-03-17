@@ -1,47 +1,68 @@
 const User=require('../models/User.js')
 const FingerPrintModel=require('../models/FingerPrint.js')
 const jwt=require('jsonwebtoken');
-var expressJwt=require('express-jwt')
+var expressJwt=require('express-jwt');
+const { conformsTo } = require('lodash');
 
 exports.signup=(req,res)=>
 {
-    console.log("reqbody",req.body);
-    const {email}=req.body;
-    User.findOne({email},(err,user)=>
+	console.log("SIGNUP HFGHDVBJH ")
+	const users=new User(req.body);
+	console.log("USRE",users)
+	users.save((err,user)=>
 	{
-        if(user)
-        {
-            const Error="email already exists"
-            console.log("email already exists")
-            return res.status(400).json({
-               Error
-            })
-        }
-        else{
-            const users=new User(req.body);
-            if(req.body.name===undefined || req.body.email===undefined || req.body.password===undefined)
-            {
-                    console.log("all fields are required")
-            }
-            else{
-                users.save((err,user)=>
-            {
-                if(err)
-                {
-                    return res.status(400).json({
-                        err
-                    })
-                }
-                
-                console.log("saving ")
-                 res.json({
-                    user
-                })
-            })
-            }    
-        }
-
+		if(err)
+		{
+			return res.status(400).json({
+				err
+			})
+		}
+		
+		console.log("saving ")
+		 res.json({
+			user
+		})
 	})
+
+    console.log("INSERT",req.body);
+    // const {email}=req.body;
+    // User.findOne({email},(err,user)=>
+	// {
+	// 	console.log("HEY INSERT  ")
+    //     if(user)
+    //     {
+    //         const Error="email already exists"
+    //         console.log("email already exists")
+    //         return res.status(400).json({
+    //            Error
+    //         })
+    //     }
+    //     else{
+    //         const users=new User(req.body);
+	// 		// / || req.body.email===undefined || req.body.password===undefined
+    //         if(req.body.name===undefined)
+    //         {
+    //                 console.log("all fields are required")
+    //         }
+    //         else{
+    //             users.save((err,user)=>
+    //         {
+    //             if(err)
+    //             {
+    //                 return res.status(400).json({
+    //                     err
+    //                 })
+    //             }
+                
+    //             console.log("saving ")
+    //              res.json({
+    //                 user
+    //             })
+    //         })
+    //         }    
+    //     }
+
+	// })
    
 };
 
@@ -127,3 +148,34 @@ exports.signout=(req,res)=>
 
 }
 
+
+exports.SearchByUser=(req,res)=>
+{
+	//const HashTag=new Blog(fields)
+	console.log("body",req.body)
+	console.log(req.body.search)
+	const searchString=req.body.search
+	User.find( {  
+		 "$or": [
+        { name: { '$regex':searchString } },
+        { email: { '$regex': searchString } }
+    ]
+   }
+   ,{name:1,email:1,_id:0},
+	(err,data)=>
+	{
+		if(err)
+		{
+			console.log('WEEE', err);
+		}
+		// console.log("DATA LEN",data)
+	res.json({
+		data
+	})
+   })
+//    .explain()
+   
+}
+
+
+//import

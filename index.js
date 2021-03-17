@@ -21,6 +21,7 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(cors())
 
+
 //api routes
 app.use('/api',userRoutes);
 app.use('/api',commentRoutes);
