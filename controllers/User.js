@@ -148,34 +148,47 @@ exports.signout=(req,res)=>
 
 }
 
-
+//1:1 scanning for searching
 exports.SearchByUser=(req,res)=>
 {
-	//const HashTag=new Blog(fields)
+	const fields=["name","email"]
+	// const projectArr=["name"]
+	const projectionObj ={"name":1}
+	// projectionObj._id=0;
+	console.log("PROJECTIONHGHDVBS",projectionObj)
 	console.log("body",req.body)
 	console.log(req.body.search)
 	const searchString=req.body.search
-	User.find( {  
-		 "$or": [
-        { name: { '$regex':searchString } },
-        { email: { '$regex': searchString } }
-    ]
-   }
-   ,{name:1,email:1,_id:0},
-	(err,data)=>
-	{
-		if(err)
-		{
-			console.log('WEEE', err);
+	console.log("SEARCH STRING",searchString)
+	try {
+		let TempArr = [] 
+		for(var i = 0; i< fields.length; i++){
+			console.log("FIELDS",fields[i])
+			let a=fields[i];
+			console.log("A",a)
+			TempArr.push({ [a]: { '$regex':'.*'+searchString+'.*' } });
 		}
-		// console.log("DATA LEN",data)
-	res.json({
-		data
-	})
-   })
-//    .explain()
-   
+		console.log(TempArr);
+		User.find( {  
+
+			"$or":TempArr
+	   }
+	   ,projectionObj,
+		(err,data)=>
+		{
+			if(err)
+			{
+				console.log('ERROR', err);
+			}
+			console.log("DATA LEN",data)
+		res.json({
+			data
+		})
+	   })
+	//    .explain()		
+	} catch (error) {
+		console.log("ERROR IN CATCH",error)
+		
+	}
 }
 
-
-//import
