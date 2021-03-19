@@ -14,6 +14,12 @@ const userSchema=new mongoose.Schema({
 		type:String,
 		require:true
 	},
+	profile:
+	{
+		//student
+		type:String,
+		require:true
+	}
 	// hashed_password:
 	// {
 	// 	type:String,

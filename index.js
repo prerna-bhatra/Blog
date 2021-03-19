@@ -13,7 +13,7 @@ const app =express()
 
 const connect = mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true ,useCreateIndex: true})
   .then(() => console.log('MongoDB Connected...'))
-  .catch(err => console.log(err));
+  .catch(err => console.log('error in coonection',err));
 
 const port = process.env.PORT || 5000
 //middlewares
